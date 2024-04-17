@@ -1,8 +1,14 @@
+package manager;
+
+import model.Epic;
+import model.Subtask;
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
-    HashMap<Integer, Task> tasks;
+    private HashMap<Integer, Task> tasks;
     public TaskManager() {
         this.tasks = new HashMap<>();
     }
@@ -33,7 +39,7 @@ public class TaskManager {
         }
         return subtasksOfEpic;
     }
-    boolean isSubtaskOfEpic(Subtask subtask, Epic epic) {
+    private boolean isSubtaskOfEpic(Subtask subtask, Epic epic) {
         return subtask.getEpic().equals(epic);
     }
 }

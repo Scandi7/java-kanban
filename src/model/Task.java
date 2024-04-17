@@ -1,10 +1,12 @@
+package model;
+
 import java.util.Objects;
 
 public class Task {
-    String taskName;
-    String taskDescription;
-    Status status;
-    int id;
+    private String taskName;
+    private String taskDescription;
+    private Status status;
+    private int id;
     public Task(String taskName, String taskDescription, Status status, int id) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
@@ -59,6 +61,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return getTaskName() + ", " + getTaskDescription() + ", ID: " + getId() + ", Status: " + getStatus();
+        return getTaskName() + ", " + getTaskDescription() + ", ID: " + getId() + ", model.Status: " + getStatus();
     }
 }

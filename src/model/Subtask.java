@@ -1,5 +1,7 @@
+package model;
+
 public class Subtask extends Task {
-    Epic epic;
+    private Epic epic;
     public Subtask(String taskName, String taskDescription, Status status, int id, Epic epic){
         super(taskName, taskDescription, status, id);
         this.epic = epic;
