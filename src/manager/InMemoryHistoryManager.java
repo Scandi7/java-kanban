@@ -1,9 +1,10 @@
 package manager;
 import model.Task;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> history;
+    private final Collection<Task> history;
     private static final int MAX_HISTORY_SIZE = 10;
 
     public InMemoryHistoryManager() {
@@ -29,7 +30,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
     @Override
-    public ArrayList<Task> getHistory() {
+    public Collection<Task> getHistory() {
         return new ArrayList<>(history);
     }
 }

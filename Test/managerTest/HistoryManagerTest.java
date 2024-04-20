@@ -9,6 +9,8 @@ import model.Task;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class HistoryManagerTest {
     //задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных
     @Test
@@ -19,7 +21,8 @@ public class HistoryManagerTest {
 
         taskManager.addTask(task);
         historyManager.add(task);
-        Task previousVersion = historyManager.getHistory().get(0);
+        List<Task> history = (List<Task>) historyManager.getHistory();
+        Task previousVersion = history.get(0);
 
         Assertions.assertEquals(Status.NEW, previousVersion.getStatus());
     }
