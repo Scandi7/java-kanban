@@ -46,17 +46,28 @@ public class Task {
         this.id = id;
     }
 
-    @Override
+/*    @Override
     public boolean equals(Object object) {
-        if(this == object) return false;
+        if(this == object) return true;
         if(object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return id == task.id;
-    }
+        return getId() == task.getId() &&
+                Objects.equals(getTaskName(), task.getTaskName()) &&
+                Objects.equals(getTaskDescription(), task.getTaskDescription()) &&
+                getStatus() == task.getStatus();
+    }*/
+
+@Override
+public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    Task task = (Task) object;
+    return id == task.id;
+}
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId(), getTaskDescription(),getTaskName(),getStatus());
     }
 
     @Override
@@ -64,4 +75,3 @@ public class Task {
         return getTaskName() + ", " + getTaskDescription() + ", ID: " + getId() + ", model.Status: " + getStatus();
     }
 }
-//
