@@ -3,8 +3,6 @@ package manager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 public interface TaskManager {
@@ -21,5 +19,6 @@ public interface TaskManager {
     void clearAllTasks();
 
     Collection<Subtask> getAllSubtasksOfEpic(Epic epic);
+
     Collection<Task> getHistory();
 }
