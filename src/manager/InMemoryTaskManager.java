@@ -12,6 +12,7 @@ import java.util.Map;
 public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks;
     private HistoryManager historyManager;
+
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.historyManager = Managers.getDefaultHistory();
@@ -62,6 +63,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Collection<Subtask> getAllSubtasksOfEpic(Epic epic) {
         Collection<Subtask> subtasksOfEpic = new ArrayList<>();
+
         for(Task task : tasks.values()) {
             if(task instanceof Subtask && ((Subtask) task).getEpic().equals(epic)) {
                 subtasksOfEpic.add((Subtask) task);
