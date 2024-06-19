@@ -64,8 +64,8 @@ public class InMemoryTaskManager implements TaskManager {
     public Collection<Subtask> getAllSubtasksOfEpic(Epic epic) {
         Collection<Subtask> subtasksOfEpic = new ArrayList<>();
 
-        for(Task task : tasks.values()) {
-            if(task instanceof Subtask && ((Subtask) task).getEpic().equals(epic)) {
+        for (Task task : tasks.values()) {
+            if (task instanceof Subtask && ((Subtask) task).getEpic().equals(epic)) {
                 subtasksOfEpic.add((Subtask) task);
             }
         }
