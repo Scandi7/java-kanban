@@ -1,5 +1,7 @@
 package manager;
+
 import model.Task;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node newNode = new Node(task, tail, null);
 
         if (tail != null) {
-            tail.next = newNode;
+            tail.setNext(newNode);
         } else {
             head = newNode;
         }
@@ -35,15 +37,15 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (node == null) {
             return;
         }
-        if (node.next != null) {
-            node.next.prev = node.prev;
+        if (node.getNext() != null) {
+            node.getNext().setPrev(node.getPrev());
         } else {
-            tail = node.prev;
+            tail = node.getPrev();
         }
-        if (node.prev != null) {
-            node.prev.next = node.next;
+        if (node.getPrev() != null) {
+            node.getPrev().setNext(node.getNext());
         } else {
-            head = node.next;
+            head = node.getNext();
         }
     }
 
@@ -52,8 +54,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         Collection<Task> history = new ArrayList<>();
         Node current = head;
         while (current != null) {
-            history.add(current.task);
-            current = current.next;
+            history.add(current.getTask());
+            current = current.getNext();
         }
         return history;
     }
