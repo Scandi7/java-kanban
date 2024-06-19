@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class Epic extends Task {
     private Collection<Subtask> subtasks;
+
     public Epic(String taskName, String taskDescription, Status status, int id) {
         super(taskName, taskDescription, status, id);
         this.subtasks = new ArrayList<>();
@@ -39,6 +40,7 @@ public class Epic extends Task {
     Epic epic = (Epic) object;
     return getId() == epic.getId();
 }
+
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getId());
