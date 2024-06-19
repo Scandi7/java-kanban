@@ -1,6 +1,5 @@
 package modelTest;
 
-import manager.TaskManager;
 import model.Epic;
 import model.Status;
 import model.Subtask;
