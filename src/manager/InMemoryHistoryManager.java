@@ -19,7 +19,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         Node newNode = new Node(task, tail, null);
 
-        if(tail != null) {
+        if (tail != null) {
             tail.next = newNode;
         } else {
             head = newNode;
@@ -46,6 +46,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             head = node.next;
         }
     }
+
     @Override
     public Collection<Task> getHistory() {
         Collection<Task> history = new ArrayList<>();
