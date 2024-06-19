@@ -4,7 +4,8 @@ import java.util.Objects;
 
 public class Subtask extends Task {
     private Epic epic;
-    public Subtask(String taskName, String taskDescription, Status status, int id, Epic epic){
+
+    public Subtask(String taskName, String taskDescription, Status status, int id, Epic epic) {
         super(taskName, taskDescription, status, id);
         this.epic = epic;
     }
