@@ -64,8 +64,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Ошибка при сохранении задач в файл", e);
         }
     }
-    private String taskToString(Task task) {
 
+    private String taskToString(Task task) {
         String type = "TASK";
         if (task instanceof Epic) {
             type = "EPIC";
