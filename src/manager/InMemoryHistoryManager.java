@@ -1,36 +1,62 @@
 package manager;
+
 import model.Task;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final Collection<Task> history;
-    private static final int MAX_HISTORY_SIZE = 10;
+    private final Map<Integer, Node> taskMap = new HashMap<>();
+    private Node head;
+    private Node tail;
 
-    public InMemoryHistoryManager() {
-        this.history = new ArrayList<>();
-    }
-    /*@Override
-    public void add(Task task) {
-        if (!history.contains(task)) {
-            if (history.size() >= MAX_HISTORY_SIZE) {
-                history.remove(0);
-            }
-            history.add(task);
-        } else {
-            history.remove(task);
-            history.add(task);
-        }
-    }*/
     @Override
     public void add(Task task) {
-        history.add(task);
-        if (history.size() > MAX_HISTORY_SIZE) {
-            history.remove(0);
+        if (task == null) {
+            return;
+        }
+        remove(task.getId());
+
+        Node newNode = new Node(task, tail, null);
+
+        if (tail != null) {
+            tail.setNext(newNode);
+        } else {
+            head = newNode;
+        }
+        tail = newNode;
+        taskMap.put(task.getId(), newNode);
+    }
+
+    @Override
+    public void remove(int id) {
+        Node node = taskMap.remove(id);
+
+        if (node == null) {
+            return;
+        }
+        if (node.getNext() != null) {
+            node.getNext().setPrev(node.getPrev());
+        } else {
+            tail = node.getPrev();
+        }
+        if (node.getPrev() != null) {
+            node.getPrev().setNext(node.getNext());
+        } else {
+            head = node.getNext();
         }
     }
+
     @Override
     public Collection<Task> getHistory() {
-        return new ArrayList<>(history);
+        Collection<Task> history = new ArrayList<>();
+        Node current = head;
+        while (current != null) {
+            history.add(current.getTask());
+            current = current.getNext();
+        }
+        return history;
     }
 }
