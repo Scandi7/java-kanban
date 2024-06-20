@@ -65,6 +65,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
     private String taskToString(Task task) {
+
         String type = "TASK";
         if (task instanceof Epic) {
             type = "EPIC";
