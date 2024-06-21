@@ -1,7 +1,7 @@
 package managerTest;
 
 import manager.FileBackedTaskManager;
-import manager.TaskManager;
+import manager.Managers;
 
 import model.Task;
 import model.Status;
@@ -20,11 +20,11 @@ public class FileBackedManagerTest {
     @Test
     void saveAndLoadEmptyFile() throws IOException {
         File tempFile = File.createTempFile("taskManager", ".csv");
-        FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
+        FileBackedTaskManager manager = Managers.getDefaultFileBackedTaskManager(tempFile);
 
         manager.clearAllTasks();
 
-        TaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
 
         Assertions.assertTrue(loadedManager.getAllTasks().isEmpty());
     }
@@ -33,7 +33,7 @@ public class FileBackedManagerTest {
     public void saveAndLoadMultipleTasks() throws IOException {
 
         File tempFile = File.createTempFile("taskManager", ".csv");
-        FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
+        FileBackedTaskManager manager = Managers.getDefaultFileBackedTaskManager(tempFile);
 
         Task task1 = new Task("Task 1", "Description 1", Status.NEW, 1);
         Epic epic1 = new Epic("Epic 1", "Description 2", Status.NEW, 2);

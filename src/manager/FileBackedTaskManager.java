@@ -1,5 +1,6 @@
 package manager;
 
+import exception.ManagerLoadException;
 import exception.ManagerSaveException;
 import model.Task;
 import model.Status;
@@ -101,7 +102,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка при загрузке задач из файла", e);
+            throw new ManagerLoadException("Ошибка при загрузке задач из файла", e);
         }
         return manager;
     }
