@@ -8,10 +8,14 @@ import model.Epic;
 import model.Subtask;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -57,7 +61,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("id,type,name,status,description,epic\n");
+            writer.write("id,type,name,status,description,duration,startTime,epic\n");
             for (Task task : getAllTasks()) {
                 writer.write(taskToString(task) + "\n");
             }
@@ -77,12 +81,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         if (task instanceof Subtask) {
             epicId = String.valueOf(((Subtask) task).getEpic().getId());
         }
-        return String.format("%d,%s,%s,%s,%s,%s",
+        String startTime = task.getStartTime() != null ? task.getStartTime().format(formatter) : "";
+        return String.format("%d,%s,%s,%s,%s,%d,%s,%s",
                 task.getId(),
                 type,
                 task.getTaskName(),
                 task.getStatus(),
                 task.getTaskDescription(),
+                task.getDuration().toMinutes(),
+                startTime,
                 epicId);
     }
 
@@ -114,15 +121,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = fields[2];
         Status status = Status.valueOf(fields[3]);
         String description = fields[4];
+        Duration duration = Duration.ofMinutes(Long.parseLong(fields[5]));
+        LocalDateTime startTime = LocalDateTime.parse(fields[6], formatter);
 
         switch (type) {
             case "TASK":
-                return new Task(name, description, status, id);
+                return new Task(name, description, status, id, duration, startTime);
             case "EPIC":
-                return new Epic(name, description, status, id);
+                return new Epic(name, description, status, id, duration, startTime);
             case "SUBTASK":
-                Epic epic = new Epic("", "", Status.NEW, Integer.parseInt(fields[5]));
-                return new Subtask(name, description, status, id, epic);
+                Epic epic = new Epic("", "", Status.NEW, Integer.parseInt(fields[7]), Duration.ZERO,null);
+                return new Subtask(name, description, status, id, epic, duration, startTime);
             default:
                 throw new IllegalArgumentException("Неизвестный тип" + type);
         }

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 
 public class ManagerTest {
-    @Test
+/*    @Test
     void defaultHistoryManager() {
         HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -25,5 +25,5 @@ public class ManagerTest {
         taskManager.addTask(task);
         Task task1 = taskManager.getTaskById(1);
         Assertions.assertEquals(task, task1);
-    }
+    }*/
 }

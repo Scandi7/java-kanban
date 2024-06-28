@@ -2,10 +2,8 @@ package manager;
 
 import model.Task;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final Map<Integer, Node> taskMap = new HashMap<>();
@@ -51,12 +49,20 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public Collection<Task> getHistory() {
-        Collection<Task> history = new ArrayList<>();
-        Node current = head;
-        while (current != null) {
-            history.add(current.getTask());
-            current = current.getNext();
-        }
-        return history;
+        return taskMap.values().stream()
+                .sorted(Comparator.comparingInt(node -> {
+                    Node current = head;
+                    int index = 0;
+                    while (current != null) {
+                        if (current.equals(node)) {
+                            break;
+                        }
+                        current = current.getNext();
+                        index++;
+                    }
+                    return index;
+                }))
+                .map(Node::getTask)
+                .collect(Collectors.toList());
     }
 }
