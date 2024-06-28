@@ -68,7 +68,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return getTaskName() + ", " + getTaskDescription() + ", ID: " + getId() + ", Status: " + getStatus() +
+        return getTaskName() + ", " + getTaskDescription() + ", ID: " + getId() + ", Status: " + getStatus()+
                 ", Duration: " + getDuration().toMinutes() + " mins, StartTime: " +getStartTime();
     }
 
