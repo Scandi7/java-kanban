@@ -9,13 +9,20 @@ import model.Subtask;
 import model.Epic;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
-public class FileBackedManagerTest {
+public class FileBackedManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        taskManager = new FileBackedTaskManager(new File("tasks.csv"));
+    }
 
     @Test
     void saveAndLoadEmptyFile() throws IOException {
@@ -29,7 +36,7 @@ public class FileBackedManagerTest {
         Assertions.assertTrue(loadedManager.getAllTasks().isEmpty());
     }
 
-    @Test
+/*    @Test
     public void saveAndLoadMultipleTasks() throws IOException {
 
         File tempFile = File.createTempFile("taskManager", ".csv");
@@ -50,5 +57,6 @@ public class FileBackedManagerTest {
         Assertions.assertTrue(tasks.contains(task1));
         Assertions.assertTrue(tasks.contains(epic1));
         Assertions.assertTrue(tasks.contains(subtask1));
-    }
+    }*/
+
 }

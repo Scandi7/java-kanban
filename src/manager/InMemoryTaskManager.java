@@ -4,18 +4,19 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks;
     private HistoryManager historyManager;
+    private Set<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.historyManager = Managers.getDefaultHistory();
+        this.prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime, Comparator.nullsLast(LocalDateTime::compareTo)));
     }
 
     private boolean isSubtaskOfEpic(Subtask subtask, Epic epic) {
@@ -24,12 +25,27 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addTask(Task task) {
-        tasks.put(task.getId(), task);
+        if (!isOverlapping(task)) {
+            tasks.put(task.getId(), task);
+            if (task.getStartTime() != null) {
+                prioritizedTasks.add(task);
+            }
+        } else {
+            throw new IllegalArgumentException("Время выполнения задачи пересекается с существующими задачами");
+        }
     }
 
     @Override
     public void updateTask(Task updateTask) {
-        tasks.put(updateTask.getId(), updateTask);
+        if (!isOverlapping(updateTask)) {
+            tasks.put(updateTask.getId(), updateTask);
+            prioritizedTasks.removeIf(task -> task.getId() == updateTask.getId());
+            if (updateTask.getStartTime() != null) {
+                prioritizedTasks.add(updateTask);
+            }
+        } else {
+            throw new IllegalArgumentException("Время обновленной задачи пересекается с существующими задачами");
+        }
     }
 
     @Override
@@ -43,33 +59,43 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeTaskById(int id) {
-        tasks.remove(id);
+        Task removedTask = tasks.remove(id);
+        if (removedTask != null && removedTask.getStartTime() != null) {
+            prioritizedTasks.remove(removedTask);
+        }
         historyManager.remove(id);
     }
 
     @Override
     public Collection<Task> getAllTasks() {
-        return new ArrayList<>(tasks.values());
+        return tasks.values().stream().collect(Collectors.toList());
     }
 
     @Override
     public void clearAllTasks() {
         tasks.clear();
-        for (Task task : historyManager.getHistory()) {
-            historyManager.remove(task.getId());
-        }
+        prioritizedTasks.clear();
+        historyManager.getHistory().forEach(task -> historyManager.remove(task.getId()));
     }
 
     @Override
     public Collection<Subtask> getAllSubtasksOfEpic(Epic epic) {
-        Collection<Subtask> subtasksOfEpic = new ArrayList<>();
+        return tasks.values().stream()
+                .filter(task -> task instanceof Subtask && isSubtaskOfEpic((Subtask) task, epic))
+                .map(task -> (Subtask) task)
+                .collect(Collectors.toList());
+    }
 
-        for (Task task : tasks.values()) {
-            if (task instanceof Subtask && ((Subtask) task).getEpic().equals(epic)) {
-                subtasksOfEpic.add((Subtask) task);
-            }
-        }
-        return subtasksOfEpic;
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
+
+    public boolean isOverlapping(Task newTask) {
+        return prioritizedTasks.stream()
+                .anyMatch(task -> task.getStartTime() != null && task.getEndTime() != null
+                && newTask.getStartTime() != null && newTask.getEndTime() != null
+                && newTask.getStartTime().isBefore(task.getEndTime())
+                && newTask.getEndTime().isAfter(task.getStartTime()));
     }
 
     @Override

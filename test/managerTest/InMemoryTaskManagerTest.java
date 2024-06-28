@@ -7,10 +7,11 @@ import model.Subtask;
 import model.Task;
 import manager.InMemoryTaskManager;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class InMemoryTaskManagerTest {
-    //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
+public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+/*    //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
     @Test
     void addAndGetTaskById() {
         TaskManager taskManager = new InMemoryTaskManager();
@@ -56,5 +57,10 @@ public class InMemoryTaskManagerTest {
         Task addedTask = taskManager.getTaskById(task.getId());
 
         Assertions.assertEquals(task, addedTask);
+    }*/
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        taskManager = new InMemoryTaskManager();
     }
 }
