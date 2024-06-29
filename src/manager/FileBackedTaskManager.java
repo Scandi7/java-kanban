@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -57,6 +58,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Collection<Subtask> subtasks = super.getAllSubtasksOfEpic(epic);
         save();
         return subtasks;
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return super.getPrioritizedTasks();
     }
 
     private void save() {
