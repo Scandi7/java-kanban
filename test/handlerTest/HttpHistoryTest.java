@@ -54,7 +54,6 @@ public class HttpHistoryTest {
                 Status.NEW, 1, Duration.ofMinutes(10), LocalDateTime.now());
         taskManager.addTask(task);
 
-        // Access the task to add it to the history
         taskManager.getTaskById(1);
 
         HttpRequest request = HttpRequest.newBuilder()

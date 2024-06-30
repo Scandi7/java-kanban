@@ -1,4 +1,3 @@
-// DurationTypeAdapter.java
 package util;
 
 import com.google.gson.TypeAdapter;
